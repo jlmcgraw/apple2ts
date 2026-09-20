@@ -405,7 +405,10 @@ export const passRequestMemoryDump = () => {
 
 export const requestMemoryView = (
   request: MemoryViewRequest,
-  timeoutMs = 5000,
+  // Headless renderers can legitimately take several seconds to service a
+  // paused memory view through the UI/worker boundary. Keep this aligned with
+  // the bridge's command/read budgets so a live operation is not discarded.
+  timeoutMs = 15000,
 ) => requestWorkerOperation<MemoryView>(MSG_MAIN.GET_MEMORY_VIEW, request, timeoutMs)
 
 export const requestMemorySearch = (
